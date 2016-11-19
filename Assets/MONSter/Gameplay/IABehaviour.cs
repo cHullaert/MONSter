@@ -10,6 +10,9 @@ public class IABehaviour : MonoBehaviour {
         public float length { get; set; }
 
         public void next() {
+            if (randomBehaviour == null)
+                return;
+
             startTime = randomBehaviour.getNextRandom(30) / 10.0f;
             length = randomBehaviour.getNextRandom(80) / 10.0f;
 
