@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MONSter\Gameplay\IABehaviour.cs" />
     <Compile Include="Assets\MONSter\Gameplay\RandomBehaviour.cs" />
     <Compile Include="Assets\MONSter\Monkey\MonkeyBehaviour.cs" />
     <Compile Include="Assets\MONSter\Network\MessageBehaviour.cs" />

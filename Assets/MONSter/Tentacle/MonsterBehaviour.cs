@@ -8,6 +8,7 @@ public class MonsterBehaviour : NetworkBehaviour {
     private float sumDeltaTime;
     private Animator animator;
     private List<float> timestamps = new List<float>();
+    public IABehaviour.PNJ pnj = null;
 
     static float maxWaitingTime = 8.0f;
     static float maxIdleTime = 8.0f;
@@ -26,6 +27,11 @@ public class MonsterBehaviour : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
+        if (gameObject.tag == "pnj") {
+            Debug.Log("pnj detected");
+            gameObject.GetComponent<MonsterBehaviour>().pnj = new IABehaviour.PNJ(this.GetComponent<RandomBehaviour>());
+        }
+
         animator = gameObject.GetComponent<Animator>();
 
         if(!isServer)
@@ -43,11 +49,6 @@ public class MonsterBehaviour : NetworkBehaviour {
 
         MessageBehaviour behaviour =GameObject.FindObjectOfType<MessageBehaviour>();
         behaviour.broadcastFire(this.playerId);    
-    }
-
-    public void Init(NetworkClient client) {
-        Debug.Log("initialize client");
-        this.client = client;
     }
 
     private void onFire() {
@@ -116,9 +117,31 @@ public class MonsterBehaviour : NetworkBehaviour {
             this.onWaiting();
         }
 
-        if (animator != null) {
-            if (Input.GetMouseButtonDown(0)) {
-                doFire();
+        if (this.pnj != null)
+        {
+            if (currentState == waitingState)
+            {
+                if (this.sumDeltaTime >= pnj.startTime)
+                {
+                    doFire();
+                }
+            }
+            else if (currentState == idleState)
+            {
+                if (this.sumDeltaTime >= pnj.length)
+                {
+                    doFire();
+                    this.pnj.next();
+                }
+            }
+        }
+        else {
+            if (animator != null)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    doFire();
+                }
             }
         }
 
