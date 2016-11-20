@@ -75,7 +75,7 @@ public class MonsterBehaviour : NetworkBehaviour {
         }
         else if (state == waitingState) {
             GameBehaviour behaviour=GameObject.FindObjectOfType<GameBehaviour>();
-            GameBehaviour.ReservedTentacle tentacle=behaviour.reserveTentacle(gameObject);
+            behaviour.reserveTentacle(gameObject);
 
             if(this.sumDeltaTime>0.0)
                 timestamps.Add(this.sumDeltaTime);
@@ -145,13 +145,13 @@ public class MonsterBehaviour : NetworkBehaviour {
             }
         }
         else {
-            if (animator != null)
+           /* if (animator != null)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
                     doFire();
                 }
-            }
+            }*/
         }
 
     }

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class TriggerBehaviour : MonoBehaviour {
+public class TriggerBehaviour : NetworkBehaviour {
 
     private GameObject FindParentByTag(GameObject gameObject, string tag) {
-        Debug.Log(gameObject.tag);
+        //Debug.Log(gameObject.tag);
         if (gameObject.tag.Equals(tag))
         {
             return gameObject;
@@ -20,7 +21,7 @@ public class TriggerBehaviour : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("collision: " + gameObject.name);
+       // Debug.Log("collision: " + gameObject.name);
         GameObject tentacle =FindParentByTag(gameObject, "tentacle");
         if (tentacle == null) {
             Debug.LogError("no tentacle found");

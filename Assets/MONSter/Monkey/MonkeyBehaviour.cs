@@ -1,25 +1,49 @@
-﻿using System.Collections;
+﻿#define INPUT_XBOX
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+
+#if (INPUT_XBOX)
 using XInputDotNetPure;
+#endif
 
 public class MonkeyBehaviour : NetworkBehaviour
 {
+#if (INPUT_XBOX)
     bool playerIndexSet = false;
     PlayerIndex playerIndex;
     GamePadState state;
     GamePadState prevState;
+#endif
     Animator animator;
-    private List<float> timestamps = new List<float>();
+
+    private void onServerFire(NetworkMessage netMsg)
+    {
+        var fm = netMsg.ReadMessage<MessageBehaviour.FireMessage>();
+        Debug.Log("mokey message for " + fm.playerId);
+        if (fm.playerId == 0)
+        {
+            this.animator.SetTrigger("Hit");
+            //this.animator.SetTrigger("Fire");
+        }
+    }
 
     // Use this for initialization
     void Start () {
         animator = gameObject.GetComponent<Animator>();
+
+        if (!isServer)
+            ClientScene.readyConnection.RegisterHandler(MessageBehaviour.MsgTypes.MSG_FIRE, onServerFire);
     }
 
     // Update is called once per frame
     void Update () {
+        if (!isServer)
+            return;
+
+        #if (INPUT_XBOX)
         // Find a PlayerIndex, for a single player game
         // Will find the first controller that is connected ans use it
         if (!playerIndexSet || !prevState.IsConnected)
@@ -79,11 +103,14 @@ public class MonkeyBehaviour : NetworkBehaviour
 
         // Make the current object turn
         transform.localRotation *= Quaternion.Euler(0.0f, state.ThumbSticks.Left.X * 25.0f * Time.deltaTime, 0.0f);*/
+        #endif
     }
 
     void OnGUI()
     {
+#if (INPUT_XBOX)
         GUI.Label(new Rect(0, 0, Screen.width, Screen.height), string.Format("\tSticks Left {0} {1} Right {2} {3}\n", state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y, state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y));
+#endif
         /* string text = "Use left stick to turn the cube, hold A to change color\n";
          text += string.Format("IsConnected {0} Packet #{1}\n", state.IsConnected, state.PacketNumber);
          text += string.Format("\tTriggers {0} {1}\n", state.Triggers.Left, state.Triggers.Right);

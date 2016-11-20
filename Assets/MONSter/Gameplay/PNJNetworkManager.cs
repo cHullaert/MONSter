@@ -3,33 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class PNJNetworkManager : MonoBehaviour {
-    public bool FirstClient = true;
+public class PNJNetworkManager : NetworkManager {
+    private int count = 0;
+    public GameObject tentaclePrefab;
+    public GameObject monkeyPrefab;
 
-    // Use this for initialization
-    void Start () {
-        NetworkManager networkManager = GameObject.FindObjectOfType<NetworkManager>();
-        NetworkServer.RegisterHandler(MsgType.Connect, OnConnected);
-    }
-
-    void OnConnected(NetworkMessage netMsg)
-    {
-        Debug.Log("Client connected");
-        if (FirstClient) {
-            NetworkManager networkManager = GameObject.FindObjectOfType<NetworkManager>();
-            GameObject trainer = null;      
-            trainer = (GameObject)GameObject.Instantiate(networkManager.playerPrefab, transform.position, Quaternion.identity);
-            trainer.name = "pnj";
-            NetworkServer.Spawn(trainer);
-            FirstClient = false;
+    public override void OnServerAddPlayer(NetworkConnection conn, short controllerID) {
+        GameObject respawn = tentaclePrefab;
+        Debug.Log("on server add player..." + controllerID);
+        Debug.Log("player cout..." + controllerID);
+        if (this.count == 0) {
+            respawn = monkeyPrefab;
         }
-    }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+        this.count++;
 
-    public void afterServerCreate() {
+        GameObject trainer = null;
+        trainer = (GameObject)GameObject.Instantiate(respawn, transform.position, Quaternion.identity);
+        NetworkServer.Spawn(trainer);
     }
 }
