@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerBehaviour : MonoBehaviour {
+public class TestTriggerBehaviour : MonoBehaviour {
 
-    void onTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other)
+    {
         Debug.Log("collision");
     }
 

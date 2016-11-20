@@ -36,11 +36,11 @@ public class GameBehaviour : NetworkBehaviour {
 
     private void releaseTentacle(GameObject gameObject) {
         checkList();
-        Debug.Log("release tentacle "+gameObject.name);
-        reservedTentacles.ForEach(match => Debug.Log(match.spawnObject.name));
+        //Debug.Log("release tentacle "+gameObject.name);
+        //reservedTentacles.ForEach(match => Debug.Log(match.spawnObject.name));
         var id = reservedTentacles.FindIndex(match => match.gameObject == gameObject);
         if (id > -1) {
-            Debug.Log("remove id: "+id);
+            //Debug.Log("remove id: "+id);
             reservedTentacles.RemoveAt(id);
         }
         else
@@ -48,7 +48,7 @@ public class GameBehaviour : NetworkBehaviour {
     }
 
     public ReservedTentacle reserveTentacle(GameObject gameObject) {
-        Debug.Log("reserve tentacle");
+        //Debug.Log("reserve tentacle");
         checkList();
 
         releaseTentacle(gameObject);
@@ -57,10 +57,10 @@ public class GameBehaviour : NetworkBehaviour {
         while (reserved == null) {
             int random=this.randomBehaviour.getNextRandom(11);
             if (reservedTentacles.Find(match => match.spawnObject == spawns[random]) == null) {
-                Debug.Log("reserve slot "+random);
+                //Debug.Log("reserve slot "+random);
                 reserved = new ReservedTentacle(spawns[random], gameObject);
                 this.reservedTentacles.Add(reserved);
-                Debug.Log("change parent to " + spawns[random].name);
+                //Debug.Log("change parent to " + spawns[random].name);
                 gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
                 gameObject.transform.SetParent(reserved.spawnObject.transform, false);
             }

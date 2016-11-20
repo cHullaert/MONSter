@@ -29,7 +29,7 @@ public class MonsterBehaviour : NetworkBehaviour {
     // Use this for initialization
     void Start () {
         if (gameObject.tag == "pnj") {
-            Debug.Log("pnj detected");
+            //Debug.Log("pnj detected");
             gameObject.GetComponent<MonsterBehaviour>().pnj = new IABehaviour.PNJ(this.GetComponent<RandomBehaviour>());
         }
 
@@ -40,11 +40,16 @@ public class MonsterBehaviour : NetworkBehaviour {
 
     }
 
+    public void doHit() {
+        this.gameObject.GetComponent<AudioSource>().Play();
+        this.animator.SetTrigger("Hit");
+    }
+
     private void doFire() {
         if (!isServer)
             return;
 
-        Debug.Log("inside");
+        //Debug.Log("inside");
         this.animator.ResetTrigger("Hit");
         this.animator.SetTrigger("Fire");
 
@@ -64,7 +69,7 @@ public class MonsterBehaviour : NetworkBehaviour {
     }
 
     private void onNewState(int state) {
-        Debug.Log("on new state");
+        //Debug.Log("on new state");
         if (state == hitState) {
             this.sumDeltaTime = 0.0f;
         }
@@ -93,14 +98,14 @@ public class MonsterBehaviour : NetworkBehaviour {
     }
 
     private void dump(int state) {
-        if (state == waitingState)
+        /* if (state == waitingState)
             Debug.Log("waiting state");
         else if (state == idleState)
             Debug.Log("idle state");
         else if (state == hitState)
             Debug.Log("hit state");
         else
-            Debug.Log("other stsate");
+            Debug.Log("other stsate");*/
     }
 
     // Update is called once per frame
