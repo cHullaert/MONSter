@@ -19,6 +19,7 @@ public class MonsterBehaviour : NetworkBehaviour {
 
     private void onServerFire(NetworkMessage netMsg) {
         var fm = netMsg.ReadMessage<MessageBehaviour.FireMessage>();
+        Debug.Log("firemessage for " + fm.playerId);
         if (fm.playerId == playerId) {
             this.animator.ResetTrigger("Hit");
             this.animator.SetTrigger("Fire");
@@ -36,7 +37,7 @@ public class MonsterBehaviour : NetworkBehaviour {
 
         if(!isServer)
             ClientScene.readyConnection.RegisterHandler(MessageBehaviour.MsgTypes.MSG_FIRE, onServerFire);
-        //this.animator.SetTrigger("Fire");
+
     }
 
     private void doFire() {
@@ -68,6 +69,9 @@ public class MonsterBehaviour : NetworkBehaviour {
             this.sumDeltaTime = 0.0f;
         }
         else if (state == waitingState) {
+            GameBehaviour behaviour=GameObject.FindObjectOfType<GameBehaviour>();
+            GameBehaviour.ReservedTentacle tentacle=behaviour.reserveTentacle(gameObject);
+
             if(this.sumDeltaTime>0.0)
                 timestamps.Add(this.sumDeltaTime);
             this.sumDeltaTime = 0.0f;
